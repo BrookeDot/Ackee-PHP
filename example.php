@@ -17,7 +17,7 @@ require_once 'ackee.class.php';
 
 <?php 
 use Ackee\PHP\Core as ackee;
-ackee::AckeeTracker();
+(new ackee())->AckeeTracker();
 ?>
 </body>
 </html>

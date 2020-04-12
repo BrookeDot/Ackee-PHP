@@ -30,7 +30,7 @@ Once your constants are set you can initate tracking like this:
     use Ackee\PHP\Core as ackee;
 
     //ouput the tracker
-    ackee::AckeeTracker();
+    new ackee())->AckeeTracker();
 
 
 You may also pass additional options into the `dataOpts` global like:
