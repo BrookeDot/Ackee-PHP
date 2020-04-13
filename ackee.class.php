@@ -16,7 +16,6 @@ if (!class_exists('Core')) {
      */
     class Core
     {
-        private $detailed = false;
         private $dataOpts = array();
        
         /**
@@ -97,12 +96,63 @@ if (!class_exists('Core')) {
         {
             if (!defined('ACKEE_DETAILED')) {
                 return false;
-            } elseif (ACKEE_DETAILED === true || filter_var($_COOKIE[ACKEE_DETAILED], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === true) {
+            } elseif (
+                ACKEE_DETAILED === true ||
+                isset($_COOKIE[ACKEE_DETAILED]) &&
+                filter_var($_COOKIE[ACKEE_DETAILED], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === true
+            ) {
                     return true;
             } else {
                 return false;
             }
         }
+
+        /**
+         * Boolen to determine if the visitor has opted-out via a cookie
+         *
+         * If ACKEE_OPT_OUT_COOKIE is defined and set to true the visit will not be tracked
+         *
+         * @since  1.0.0
+         * @access private
+         * @return bool
+         */
+        private static function respectOptOutCookie()
+        {
+            if (
+                defined('ACKEE_OPT_OUT_COOKIE') &&
+                isset($_COOKIE[ACKEE_OPT_OUT_COOKIE]) &&
+                filter_var($_COOKIE[ACKEE_OPT_OUT_COOKIE], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === true
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Boolen to determine if the visitor has enabled Do Not Track (DNT) in their browser
+         *
+         * If ACKEE_DISABLE_DNT is defined and not false this setting will have no effect
+         *
+         * @since  1.0.0
+         * @access private
+         * @return bool
+         */
+        private static function respectDNT()
+        {
+            if (
+                defined('ACKEE_DISABLE_DNT') &&
+                filter_var(ACKEE_DISABLE_DNT, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== false &&
+                filter_var(ACKEE_DISABLE_DNT, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null
+            ) {
+                return false;
+            } elseif (array_key_exists('HTTP_DNT', $_SERVER) && (1 === (int) $_SERVER['HTTP_DNT'])) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
 
        /**
          * Returns the data-ackee-opts
@@ -140,13 +190,17 @@ if (!class_exists('Core')) {
             $domainID      = self::getDomainID();
             $dataOpsArray  = self::buildDataOpts($dataOpts);
 
-            echo(
-            '<script async src="' . $installDomain . '/' . $trackerName . '" ' .
-            'data-ackee-server="' . $installDomain . '" ' .
-            'data-ackee-domain-id="' . $domainID . '" ' .
-            $dataOpsArray . '> ' .
-            '</script>' . "\r\n"
-            );
+            if ((bool)self::respectDNT() || (bool)self::respectOptOutCookie()) {
+                return false;
+            } else {
+                echo(
+                '<script async src="' . $installDomain . '/' . $trackerName . '" ' .
+                'data-ackee-server="' . $installDomain . '" ' .
+                'data-ackee-domain-id="' . $domainID . '" ' .
+                $dataOpsArray . '> ' .
+                '</script>' . "\r\n"
+                );
+            }
         }
     // end class
     }
