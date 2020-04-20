@@ -55,11 +55,12 @@ Once you have set the constants you can initiate tracking like this:
     use Ackee\PHP\Core as ackee;
 
     //ouput the tracker
-    new ackee())->AckeeTracker();
+    (new ackee())->AckeeTracker();
 
 
-You may also pass additional options into the `dataOpts` global. The contents of this array are JSON encoded and passed into `data-ackee-opts`. For example, if you wanted to ignore visitors from localhost, you could add:
-`dataOpts['ignoreLocalhost'] = 'true'`
+You may also pass additional options into the `dataOpts` global. The contents of this array are JSON encoded and passed into `data-ackee-opts`. For example, if you wanted to ignore visitors from localhost add the following before `AckeeTracker()`:
+
+    $dataOpts['ignoreLocalhost'] = 'true'
 
 
 # Changelog
@@ -70,11 +71,19 @@ You may also pass additional options into the `dataOpts` global. The contents of
 
 # License
 
-    Ackee PHP is a PHP Class to simplify adding the JavaScript required to track visits with an Ackee Tracking Instance
+    Ackee PHP is a PHP Class to simplify adding the JavaScript
+    required to track visits with an Ackee Tracking Instance
     Copyright (C) 2020 Brooke. ( https://brooke.codes/contact )
 
-    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public Licensec
+    along with this program.  If not, see <http://www.gnu.org/licenses/>

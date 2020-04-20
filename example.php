@@ -7,6 +7,7 @@ define('ACKEE_OPT_OUT_COOKIE', 'ackee_opt_out_cookie');
 define('ACKEE_DETAILED', 'ackee_detailed_cookie');
 
 require_once 'ackee.class.php';
+use Ackee\PHP\Core as ackee;
 ?>
 
 <!doctype html>
@@ -18,9 +19,6 @@ require_once 'ackee.class.php';
 <h1>Ackee PHP Example</h1>
 <p><strong> If you view the page source you'll see the output of tracker below this text if enabled.</strong></p>
 
-<?php 
-use Ackee\PHP\Core as ackee;
-(new ackee())->AckeeTracker();
-?>
+<?php (new ackee())->AckeeTracker(); ?>
 </body>
 </html>
